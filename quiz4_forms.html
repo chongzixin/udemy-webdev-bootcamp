@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Form Quiz 4</title>
+</head>
+<body>
+	<h1>Register</h1>
+
+	<form>
+		<div>
+			<label for="fname">First Name:</label>
+			<input type="text" id="fname" name="fname" placeholder="John" required>
+
+			<label for="fname">Last Name:</label>
+			<input type="text" id="lname" name="lname" placeholder="Smith" required>	
+		</div>
+
+		<div>
+			<label for="male">Male</label>
+			<input type="radio" name="gender" id="male" value="male">
+			<label for="female">Female</label>
+			<input type="radio" name="gender" id="female" value="female">
+			<label for="other">Other</label>
+			<input type="radio" name="gender" id="other" value="other">
+		</div>
+
+		<div>
+			<label for="email">Email:</label>
+			<input type="email" id="email" name="email" placeholder="your email" required>
+
+			<label for="password">Password:</label>
+			<input type="password" id="password" name="password" pattern=".{5,10}" title="between 5 to 10 chars" required="">
+		</div>
+
+		<div>
+			<label>Birthday:</label>
+			<select name="month">
+				<option>Month</option>
+				<option>Jan</option>
+				<option>Feb</option>
+				<option>Mar</option>
+			</select>
+
+			<select name="day">
+				<option>Day</option>
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+			</select>
+
+			<select name="year">
+				<option>Year</option>
+				<option>2011</option>
+				<option>2012</option>
+				<option>2013</option>
+			</select>
+		</div>
+
+		<div>
+			<label for="tncs">I agree to the terms and conditions</label>
+			<input type="checkbox" id="tncs" name="tncs" required>
+		</div>
+
+		<input type="submit" name="Submit">
+	</form>
+</body>
+</html>
