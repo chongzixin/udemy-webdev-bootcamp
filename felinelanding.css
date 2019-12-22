@@ -1,0 +1,24 @@
+body {
+	background: url("http://wallpaperswide.com/download/funny_cat_5-wallpaper-1280x800.jpg");
+	background-size: cover;
+	background-position: center;
+}
+
+#content {
+	text-align:center;
+	padding-top: 15%;
+	color: white;
+	text-shadow: 2px 2px #000000;
+}
+
+html {
+	height:100%;
+}
+
+hr {
+	width: 70%;
+}
+
+h1 {
+	font-size: 5em;
+}
