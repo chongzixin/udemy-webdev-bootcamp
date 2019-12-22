@@ -36,7 +36,9 @@ function addScore() {
 }
 
 // reset all the scores and their text
-btnReset.addEventListener("click", function() {
+btnReset.addEventListener("click", reset);
+
+function reset() {
     gameEnded = false;
     player1 = 0;
     player2 = 0;
@@ -44,9 +46,10 @@ btnReset.addEventListener("click", function() {
     spanPlayer2.textContent = 0;
     spanPlayer1.classList.remove("winner");
     spanPlayer2.classList.remove("winner");
-});
+}
 
 inputNum.addEventListener("change", function () {
     txtBestOf.textContent = "Playing to: " + this.value;
     playTill = Number(this.value);
+    reset();
 });
