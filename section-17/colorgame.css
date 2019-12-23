@@ -1,0 +1,70 @@
+body {
+    background-color: #232323;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+button {
+    border: none;
+    color:steelblue;
+    height: 100%;
+    font-size: inherit;
+    font-weight: 700;
+    letter-spacing: 1px;
+    outline: none;
+}
+
+button:hover, .active {
+    background-color:steelblue;
+    color: white;
+    transition: all, 0.3s;
+    -webkit-transition: all, 0.3s;
+    -moz-transition: all, 0.3s;
+}
+
+#topbar {
+    background-color: steelblue;
+    color: white;
+    font-family: "Monserrat", "Avenir";
+    text-align: center;
+    margin: 0;
+    font-weight: normal;
+    padding: 20px 0;
+}
+
+#container {
+    background-color: white;
+    width: 100%;
+    margin-bottom: 10px;
+    height: 40px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+#txtRGB {
+    font-size: 3.5rem;
+}
+
+#gamearea {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.gameBox {
+    border-radius: 15px;
+    width: 30%;
+    margin: 1.66%;
+    padding-bottom: 30%;
+    float: left;
+    transition: background, 0.6s;
+    -webkit-transition: background, 0.6s;
+    -moz-transition: background, 0.6s;
+}
+
+#txtGameMsg {
+    display:inline-block;
+    width: 20%;
+    text-align: center;
+    color:black;
+    font-family: "Monserrat", "Avenir";
+}
