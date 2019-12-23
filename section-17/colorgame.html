@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Color Game</title>
+    <link rel="stylesheet" href="colorgame.css">
+</head>
+<body>
+    <h1 id="topbar">
+        THE GREAT <br />
+        <span id="txtRGB">RGB(1, 2, 3)</span> <br />
+        GUESSING GAME
+    </h1>
+
+    <div id="container">
+        <button id="btnNewGame">NEW COLORS</button>
+        <div id="txtGameMsg"></div>
+        <button id="btnEasy" class="mode">EASY</button>
+        <button id="btnHard" class="mode active">HARD</button>
+    </div>
+
+    <div id="gamearea">
+        <div id="firstBox" class="gameBox"></div>
+        <div id="secondBox" class="gameBox"></div>
+        <div id="thirdBox" class="gameBox"></div>
+        <div id="fourthBox" class="gameBox"></div>
+        <div id="fifthBox" class="gameBox"></div>
+        <div id="sixthBox" class="gameBox"></div>
+    </div>
+    
+    <script src="colorgame.js" type="text/javascript"></script>
+</body>
+</html>
