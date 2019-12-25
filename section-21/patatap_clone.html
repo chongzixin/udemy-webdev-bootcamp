@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Circles Patatap</title>
+    <link rel="stylesheet" href="circles.css">
+    <script type="text/javascript" src="paperjs-v0.12.4/dist/paper-full.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.2/howler.core.min.js"></script>
+    <script type="text/javascript" src="data.js"></script>
+    <!-- Define inlined PaperScript associate it with myCanvas -->
+    <script type="text/paperscript" canvas="myCanvas">
+        var circles = [];
+        
+        function onKeyDown(event) {
+            if(data[event.character]) {
+                var maxPoint = new Point(view.size.width, view.size.height);
+                var randomPoint = Point.random() * maxPoint;
+                var newCircle = new Path.Circle(randomPoint, 500);
+                newCircle.fillColor = data[event.character].color;
+                circles.push(newCircle);
+                
+                data[event.character].sound.play();
+            }
+        }
+        
+        function onFrame(event) {
+            for(var i=0; i<circles.length; i++) {
+                circles[i].fillColor.hue += 1;
+                circles[i].scale(.9);
+
+                // remove the circles once they disappear
+                if(circles[i].area < 1) {
+                    circles[i].remove(); // remove circle from canvas
+                    circles.splice(i,1); // remove circle from array
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <canvas id="myCanvas" resize></canvas>
+</body>
+</html>
