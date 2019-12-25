@@ -17,13 +17,13 @@
         // PaperScript does that for us, and much more!
         path.lineTo(start + [ 100, -50 ]);
         
-        var circles = [];
-        
-        for(var i=0; i<100; i += 10) {
-            // Create a circle shaped path with its center at the center
-            // of the view and a radius of 30:
-            var myCircle = new Path.Circle(new Point(i, i), 30);
-            myCircle.fillColor = 'red';
+        for(var i=0; i<1000; i += 100) {
+            for(var j=0; j<1000; j+=100) {
+                // Create a circle shaped path with its center at the center
+                // of the view and a radius of 30:
+                var myCircle = new Path.Circle(new Point(i, j), 10);
+                myCircle.fillColor = 'red';
+            }
         }
     </script>
 </head>
