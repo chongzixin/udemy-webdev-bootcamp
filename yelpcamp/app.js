@@ -7,7 +7,7 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // MONGODB
-mongoose.connect("mongodb://localhost/yelpcamp", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect("mongodb://localhost:27017/yelpcamp", {useNewUrlParser: true, useUnifiedTopology: true});
 var campgroundSchema = new mongoose.Schema({
     name: String,
     image: String
