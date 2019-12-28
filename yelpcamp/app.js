@@ -1,6 +1,6 @@
-var express = require("express");
-var bodyParser = require("body-parser");
-var mongoose = require("mongoose");
+var express = require("express"),
+    bodyParser = require("body-parser"),
+    mongoose = require("mongoose");
 
 var app = express();
 app.set("view engine", "ejs");
@@ -30,11 +30,9 @@ app.get("/campgrounds", (req, res) => {
 });
 
 app.post("/campgrounds", (req, res) => {
+    var newCampground = {name: req.body.name, image: req.body.imgURL};
     // insert campground to DB
-    Campground.create({
-        name: req.body.name,
-        image: req.body.imgURL
-    }, (err, campground) => {
+    Campground.create(newCampground, (err, campground) => {
         if(err) {
             console.log(err);
         } else {
