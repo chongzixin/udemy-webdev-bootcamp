@@ -2,8 +2,8 @@ var express = require("express"),
     mongoose = require("mongoose"),
     passport = require("passport"),
     bodyParser = require("body-parser"),
-    localStrategy = require("passport-local"),
-    expressSession = require("express-session"),
+    LocalStrategy = require("passport-local"),
+    ExpressSession = require("express-session"),
     passportLocalMongoose = require("passport-local-mongoose"),
     User = require("./models/user");
 
@@ -14,12 +14,13 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(expressSession({
+app.use(ExpressSession({
     secret: "Thur likes to eat bread",
     resave: false,
     saveUninitialized: false
 }));
 
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -50,6 +51,20 @@ app.post("/register", (req, res) => {
             res.redirect("/secret");
         });
     });
+});
+
+// login routes
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
+// passport.authenticate acts as middleware
+// it's basically something that gets perform between the beginning and callback of the route
+app.post("/login", passport.authenticate("local", {
+    successRedirect: "/secret",
+    failureRedirect: "/login"
+}) ,(req, res) => {
+
 });
 
 app.listen(3000, () => {
