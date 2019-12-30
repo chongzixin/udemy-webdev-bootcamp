@@ -12,15 +12,16 @@ var express = require("express"),
 var app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// PASSPORT CONFIG
 app.use(express.static(__dirname + "/public"));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(ExpressSession({
-    secret: "Thur likes to eat bread",
+    secret: "Thur likes to read",
     resave: false,
     saveUninitialized: false
 }));
-
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -106,6 +107,47 @@ app.post("/campgrounds/:id/comments", (req, res) => {
             });
         }
     });
+});
+
+// =================
+// AUTH ROUTES
+// =================
+app.get("/register", (req, res) => {
+    res.render("register");
+});
+
+app.post("/register", (req, res) => {
+    var username = req.body.username;
+    var password = req.body.password;
+    var newUser = new User({ username: username });
+
+    User.register(newUser, password, (err, user) => {
+        if(err) {
+            console.log(err);
+            return res.redirect("/register");
+        }
+        else {
+            passport.authenticate("local")(req, res, () => {
+                res.redirect("/campgrounds");
+            });
+        }
+    });
+});
+
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
+app.post("/login", passport.authenticate("local", {
+    successRedirect: "/campgrounds",
+    failureRedirect: "/login"
+}), (req, res) => {
+
+})
+
+app.get("/logout", (req, res) => {
+    req.logout();
+    res.redirect("/");
 });
 
 app.listen(3000, () => {
