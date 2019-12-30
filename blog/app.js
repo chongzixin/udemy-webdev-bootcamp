@@ -1,14 +1,20 @@
 const express = require("express"),
     mongoose = require("mongoose"),
-    bodyParser = require("body-parser");
+    bodyParser = require("body-parser")
+    methodOverride = require("method-override");
 
 const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(methodOverride("_method"));
 
 // MONGOOSE - connect, create schema, model
-mongoose.connect("mongodb://localhost:27017/blog", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect("mongodb://localhost:27017/blog", {
+    useNewUrlParser: true, 
+    useUnifiedTopology: true,
+    useFindAndModify: false
+});
 const blogSchema = mongoose.Schema({
     title: String,
     image: String,
@@ -60,6 +66,28 @@ app.get("/blogs/:id", (req, res) => {
     Blog.findById(id, (err, blog) => {
         if(err) res.redirect("/blogs");
         else res.render("show", {"blog": blog});
+    });
+});
+
+// show edit form, then allow to edit it.
+app.get("/blogs/:id/edit", (req, res) => {
+    // retrieve from db based on id then send to edit page
+    var id = req.params.id;
+    Blog.findById(id, (err, blog) => {
+        if(err) res.redirect("/blogs");
+        else res.render("edit", {"blog": blog});
+    });
+});
+
+app.put("/blogs/:id", (req, res) => {
+    var id = req.params.id;
+    Blog.findByIdAndUpdate(id, req.body.blog, (err, blog) => {
+        if(err) {
+            console.log(err);
+        } else {
+            // redirect back to the SHOW page
+            res.redirect("/blogs/" + id);
+        }
     });
 });
 
