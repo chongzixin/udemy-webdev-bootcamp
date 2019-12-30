@@ -11,6 +11,7 @@ mongoose.connect("mongodb://localhost/auth_demo_app", {useUnifiedTopology:true, 
 
 var app = express();
 app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(expressSession({
@@ -28,6 +29,27 @@ app.get("/", (req, res) => {
 
 app.get("/secret", (req, res) => {
     res.render("secret");
+});
+
+// auth routes
+app.get("/register", (req, res) => {
+    res.render("register");
+});
+
+app.post("/register", (req, res) => {
+    var username = req.body.username;
+    var password = req.body.password;
+
+    User.register(new User({username: username}), password, (err, user) => {
+        if(err) {
+            console.log(err);
+            return res.render("register");
+        } 
+        // log the user in
+        passport.authenticate("local")(req, res, () => {
+            res.redirect("/secret");
+        });
+    });
 });
 
 app.listen(3000, () => {
