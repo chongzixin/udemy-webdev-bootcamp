@@ -91,6 +91,18 @@ app.put("/blogs/:id", (req, res) => {
     });
 });
 
+// delete the blog
+app.delete("/blogs/:id", (req, res) => {
+    var id = req.params.id;
+    Blog.findByIdAndDelete(id, (err, blog) => {
+        if(err) {
+            console.log(err);
+            res.redirect("/");
+        } else 
+            res.redirect("/");
+    });
+});
+
 app.listen(3000, () => {
     console.log("server has started...");
 });
