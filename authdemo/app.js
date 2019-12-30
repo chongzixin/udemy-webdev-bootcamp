@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
     res.render("home");
 });
 
-app.get("/secret", (req, res) => {
+app.get("/secret", isLoggedIn, (req, res) => {
     res.render("secret");
 });
 
@@ -66,6 +66,22 @@ app.post("/login", passport.authenticate("local", {
 }) ,(req, res) => {
 
 });
+
+// logout
+app.get("/logout", (req, res) => {
+    // passport just destroys all your session variables
+    req.logout();
+    res.redirect("/");
+});
+
+// standard for all middlewares to have 3 arguments
+// next is the next thing to be called
+function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/login");
+}
 
 app.listen(3000, () => {
     console.log("server has started");
