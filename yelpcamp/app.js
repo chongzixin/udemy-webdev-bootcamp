@@ -15,13 +15,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // PASSPORT CONFIG
 app.use(express.static(__dirname + "/public"));
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(ExpressSession({
     secret: "Thur likes to read",
     resave: false,
     saveUninitialized: false
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -80,7 +80,7 @@ app.get("/campgrounds/:id", (req, res) => {
 // =================
 
 // form to add new comments
-app.get("/campgrounds/:id/comments/new", (req, res) => {
+app.get("/campgrounds/:id/comments/new", isLoggedIn, (req, res) => {
     var id = req.params.id;
     Campground.findById(id, (err, campground) => {
         if(err) console.log(err);
@@ -90,7 +90,7 @@ app.get("/campgrounds/:id/comments/new", (req, res) => {
     });
 });
 
-app.post("/campgrounds/:id/comments", (req, res) => {
+app.post("/campgrounds/:id/comments", isLoggedIn, (req, res) => {
     var id = req.params.id;
     var comment = req.body.comment;
     
@@ -149,6 +149,13 @@ app.get("/logout", (req, res) => {
     req.logout();
     res.redirect("/");
 });
+
+function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/login");
+}
 
 app.listen(3000, () => {
     console.log("server started running...");
