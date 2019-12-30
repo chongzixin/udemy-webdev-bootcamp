@@ -36,6 +36,23 @@ app.get("/blogs", (req, res) => {
     });
 });
 
+// display the form
+app.get("/blogs/new", (req, res) => {
+    res.render("new");
+});
+
+// insert it into db
+app.post("/blogs", (req, res) => {
+    var newBlog = req.body.blog;
+    Blog.create(newBlog, (err, blog) => {
+        if(err) {
+            console.log(err);
+            res.redirect("/blogs/new");
+        } else
+            res.redirect("/");
+    });
+});
+
 app.listen(3000, () => {
     console.log("server has started...");
 });
