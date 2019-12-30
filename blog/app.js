@@ -53,6 +53,16 @@ app.post("/blogs", (req, res) => {
     });
 });
 
+// show specific details of post
+app.get("/blogs/:id", (req, res) => {
+    // retrieve from db based on id then send to details page
+    var id = req.params.id;
+    Blog.findById(id, (err, blog) => {
+        if(err) res.redirect("/blogs");
+        else res.render("show", {"blog": blog});
+    });
+});
+
 app.listen(3000, () => {
     console.log("server has started...");
 });
