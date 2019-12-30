@@ -1,14 +1,30 @@
 var express = require("express"),
+    ExpressSession = require("express-session"),
     bodyParser = require("body-parser"),
     mongoose = require("mongoose"),
+    passport = require("passport"),
+    LocalStrategy = require("passport-local"),
     Campground = require("./models/campground"),
-    Comment = require("./models/comment")
+    Comment = require("./models/comment"),
+    User = require("./models/user"),
     seedDB = require("./seeds.js");
 
 var app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(ExpressSession({
+    secret: "Thur likes to eat bread",
+    resave: false,
+    saveUninitialized: false
+}));
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 seedDB();
 
 // MONGODB
