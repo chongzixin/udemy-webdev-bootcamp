@@ -16,10 +16,16 @@ router.get("/new", isLoggedIn, (req, res) => {
 });
 
 // create a new comments
-router.post("/comments", isLoggedIn, (req, res) => {
+router.post("/", isLoggedIn, (req, res) => {
     var id = req.params.id;
     var comment = req.body.comment;
-    
+    var author = {
+        id: req.user.id,
+        username: req.user.username
+    };
+    comment.author = author;
+
+    console.log("comment is " + JSON.stringify(comment));
     Campground.findById(id, (err, campground) => {
         if(err) console.log(err);
         else {
