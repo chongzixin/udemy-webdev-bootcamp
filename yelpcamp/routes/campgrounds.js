@@ -1,5 +1,9 @@
-var express = require("express");
+var express = require("express"),
+    multer = require("multer");
+
 var router = express.Router();
+var upload = multer({dest:'public/uploads/'});
+const IMG_FOLDER = "/uploads/";
 
 var Campground = require("../models/campground");
 var middleware = require("../middleware");
@@ -15,14 +19,17 @@ router.get("/", (req, res) => {
 });
 
 // insert campground into db, check that user is already logged in
-router.post("/", middleware.isLoggedIn, (req, res) => {
+router.post("/", middleware.isLoggedIn, upload.single('campground[image]'), (req, res) => {
     var createdBy = {
         id: req.user.id,
         username: req.user.username
     };
     var newCampground = req.body.campground;
     newCampground.createdBy = createdBy;
-    // var newCampground = {name: req.body.name, image: req.body.imgURL, description: req.body.description, createdBy: createdBy};
+    // if the user uploaded an image, use that image instead
+    if(req.file)
+        newCampground.image = IMG_FOLDER + req.file.filename;
+
     // insert campground to DB
     Campground.create(newCampground, (err, campground) => {
         if(err) {
