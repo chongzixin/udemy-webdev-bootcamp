@@ -26,6 +26,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
         username: req.user.username
     };
     comment.author = author;
+    comment.createdOn = Date.now();
     
     Campground.findById(id, (err, campground) => {
         if(err) console.log(err);
@@ -57,6 +58,8 @@ router.get("/:comment_id/edit", middleware.checkCommentOwnership, (req, res) => 
 // route to edit comments
 router.put("/:comment_id", middleware.checkCommentOwnership, (req, res) => {
     var comment_id = req.params.comment_id;
+    // also update the date of the comment
+    req.body.comment.createdOn = Date.now();
     Comment.findByIdAndUpdate(comment_id, req.body.comment, (err, comment) => {
         if(err) res.redirect("back");
         else {
@@ -65,6 +68,7 @@ router.put("/:comment_id", middleware.checkCommentOwnership, (req, res) => {
     });
 });
 
+// route to delete comments
 router.delete("/:comment_id", middleware.checkCommentOwnership, (req, res) => {
     var comment_id = req.params.comment_id;
     Comment.findByIdAndDelete(comment_id, (err, comment) => {

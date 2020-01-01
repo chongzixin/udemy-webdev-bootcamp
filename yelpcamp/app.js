@@ -4,6 +4,7 @@ var express = require("express"),
     mongoose = require("mongoose"),
     passport = require("passport"),
     flash = require("connect-flash"),
+    moment = require("moment"),
     LocalStrategy = require("passport-local"),
     methodOverride = require("method-override"),
     Campground = require("./models/campground"),
@@ -37,6 +38,7 @@ passport.deserializeUser(User.deserializeUser());
 // this is a middleware that will send req.user to every route (res)
 app.use(function(req, res, next) {
     res.locals.currentUser = req.user;
+    res.locals.moment = moment;
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
     next();
