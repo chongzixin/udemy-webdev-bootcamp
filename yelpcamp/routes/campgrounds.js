@@ -8,18 +8,18 @@ const IMG_FOLDER = "/uploads/";
 var Campground = require("../models/campground");
 var middleware = require("../middleware");
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
     // List all campgrounds from DB
-    Campground.find({}, (err, campgrounds) => {
-        if(err) console.log(err);
-        else {
-            res.render("campgrounds/index", { campgrounds: campgrounds });
-        }
-    });
+    try {
+        let campgrounds = await Campground.find({});
+        res.render("campgrounds/index", {campgrounds});
+    } catch(err) {
+        console.log(err);
+    }
 });
 
 // insert campground into db, check that user is already logged in
-router.post("/", middleware.isLoggedIn, upload.single('campground[image]'), (req, res) => {
+router.post("/", middleware.isLoggedIn, upload.single('campground[image]'), async (req, res) => {
     var createdBy = {
         id: req.user.id,
         username: req.user.username
@@ -31,15 +31,12 @@ router.post("/", middleware.isLoggedIn, upload.single('campground[image]'), (req
         newCampground.image = IMG_FOLDER + req.file.filename;
 
     // insert campground to DB
-    Campground.create(newCampground, (err, campground) => {
-        if(err) {
-            console.log(err);
-        } else {
-            console.log("successfully added campground: " + campground);
-            // redirect back to campgrounds page
-            res.redirect("/campgrounds");
-        }
-    });
+    try {
+        let campground = await Campground.create(newCampground);
+        res.redirect("/campgrounds");
+    } catch(err) {
+        console.log(err);
+    }
 });
 
 // show form to create new campground, check that user is already logged in
@@ -48,51 +45,53 @@ router.get("/new", middleware.isLoggedIn, (req, res) => {
 });
 
 // CRITICAL TO PUT /NEW BEFORE /:id OTHERWISE /NEW WILL NEVER BE PROCESSED
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
     var id = req.params.id;
+
     // retrieve the ID from the db
-    Campground.findById(id).populate("comments").exec((err, campground) => {
-        if (err) console.log(err)
-        else {
-            res.render("campgrounds/show", { campground: campground });
-        }
-    });
+    try {
+        let campground = await Campground.findById(id).populate("comments").exec();
+        res.render("campgrounds/show", {campground});
+    } catch(err) {
+        console.log(err);
+    }
 });
 
 // show form to edit campground
-router.get("/:id/edit", middleware.checkCampgroundOwnership, (req, res) => {
+router.get("/:id/edit", middleware.checkCampgroundOwnership, async (req, res) => {
     var id = req.params.id;
     // retrieve the ID from the db
-    Campground.findById(id, (err, campground) => {
-        if (err) res.redirect("/campgrounds");
-        else {
-            res.render("campgrounds/edit", { campground: campground });
-        }
-    });
+    try {
+        let campground = await Campground.findById(id);
+        res.render("campgrounds/edit", {campground});
+    } catch(err) {
+        req.flash("error", "Cannot find the chosen campground");
+    }
 });
 
 // edit the campground
-router.put("/:id", middleware.checkCampgroundOwnership, (req, res) => {
+router.put("/:id", middleware.checkCampgroundOwnership, async (req, res) => {
     var id = req.params.id;
     var newCampground = req.body.campground;
     // retrieve the ID from the db
-    Campground.findByIdAndUpdate(id, newCampground, (err, campground) => {
-        if (err) console.log(err)
-        else {
-            res.redirect("/campgrounds/" + id);
-        }
-    });
+    try {
+        let campground = await Campground.findByIdAndUpdate(id, newCampground);
+        res.redirect("/campgrounds/" + id);
+    } catch(err) {
+        req.flash("error", "Cannot update the campground: " + err);
+    }
 });
 
 // delete the campground
-router.delete("/:id", middleware.checkCampgroundOwnership, (req, res) => {
+router.delete("/:id", middleware.checkCampgroundOwnership, async (req, res) => {
     var id = req.params.id;
-    Campground.findByIdAndDelete(id, (err, campground) => {
-        if (err) console.log(err)
-        else {
-            res.redirect("/campgrounds");
-        }
-    });
+
+    try {
+        await Campground.findByIdAndDelete(id);
+        res.redirect("/campgrounds");
+    } catch(err) {
+        req.flash("error", "Cannot delete the campground: " + err);
+    }
 });
 
 module.exports = router;
