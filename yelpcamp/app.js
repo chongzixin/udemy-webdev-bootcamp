@@ -22,6 +22,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(flash());
 
+app.locals.moment = moment;
+
 // PASSPORT CONFIG
 app.use(express.static(__dirname + "/public"));
 app.use(ExpressSession({
@@ -38,7 +40,6 @@ passport.deserializeUser(User.deserializeUser());
 // this is a middleware that will send req.user to every route (res)
 app.use(function(req, res, next) {
     res.locals.currentUser = req.user;
-    res.locals.moment = moment;
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
     next();

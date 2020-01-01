@@ -26,7 +26,6 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
         username: req.user.username
     };
     comment.author = author;
-    comment.createdOn = Date.now();
     
     Campground.findById(id, (err, campground) => {
         if(err) console.log(err);
